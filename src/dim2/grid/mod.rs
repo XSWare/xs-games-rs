@@ -37,7 +37,18 @@ impl<T> Grid<T>
 where
     T: Copy,
 {
-    pub const fn new(width: usize, height: usize, values: Box<[T]>) -> Self {
+    pub fn new(width: usize, height: usize, initializer_value: T) -> Self {
+        Self::with_preset_values(width, height, vec![initializer_value; height * width].into_boxed_slice())
+    }
+
+    pub fn with_default_values(width: usize, height: usize) -> Self
+    where
+        T: Default,
+    {
+        Self::new(width, height, T::default())
+    }
+
+    pub const fn with_preset_values(width: usize, height: usize, values: Box<[T]>) -> Self {
         assert!(values.len() == height * width);
         Self {
             size: RectSize { width, height },
@@ -102,7 +113,7 @@ where
             values.push(self.values[to_grid_index(grid_pos, self.size)]);
         }
 
-        Some(Grid::new(size.width, size.height, values.into_boxed_slice()))
+        Some(Grid::with_preset_values(size.width, size.height, values.into_boxed_slice()))
     }
 
     pub fn into_array(self) -> Box<[T]> {

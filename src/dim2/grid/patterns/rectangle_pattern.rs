@@ -26,7 +26,7 @@ pub fn new_rectangle_pattern(offset_left: usize, offset_up: usize, offset_right:
     let mut mapping = vec![true; width * height];
     mapping[to_grid_index(center, RectSize::new(width, height))] = false;
     GridPattern {
-        mapping: Grid::new(width, height, mapping.into_boxed_slice()),
+        mapping: Grid::with_preset_values(width, height, mapping.into_boxed_slice()),
         center,
     }
 }

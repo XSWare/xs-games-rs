@@ -2,7 +2,7 @@ use xs_games_rs::dim2::grid::{to_grid_position, Grid};
 
 #[test]
 fn iterate_over_end() {
-    let grid = Grid::new(2, 2, Box::new([1; 4]));
+    let grid = Grid::with_preset_values(2, 2, Box::new([1; 4]));
 
     let mut iter = grid.iter_with_position();
 
@@ -15,7 +15,7 @@ fn iterate_over_end() {
 
 #[test]
 fn iterate_mutable() {
-    let mut grid = Grid::new(2, 2, Box::new([1; 4]));
+    let mut grid = Grid::with_preset_values(2, 2, Box::new([1; 4]));
 
     for i in grid.iter_mut_with_position() {
         *i.1 = i.0.x;
@@ -25,7 +25,7 @@ fn iterate_mutable() {
 
 #[test]
 fn iterate_move() {
-    let grid = Grid::new(2, 2, Box::new([1; 4]));
+    let grid = Grid::with_preset_values(2, 2, Box::new([1; 4]));
     let size = grid.size();
     let mut list: Vec<i32> = vec![];
     let mut index: i64 = -1;
