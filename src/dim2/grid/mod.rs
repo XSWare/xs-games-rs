@@ -25,25 +25,23 @@ pub fn to_grid_position(index: usize, size: RectSize) -> Position {
 }
 
 #[derive(Clone)]
-pub struct Grid<T>
-where
-    T: Copy,
-{
+pub struct Grid<T> {
     size: RectSize,
     values: Box<[T]>,
 }
 
-impl<T> Grid<T>
-where
-    T: Copy,
-{
-    pub fn new(width: usize, height: usize, initializer_value: T) -> Self {
+impl<T> Grid<T> {
+    pub fn new(width: usize, height: usize, initializer_value: T) -> Self
+    where
+        T: Clone,
+    {
         Self::with_preset_values(width, height, vec![initializer_value; height * width].into_boxed_slice())
     }
 
     pub fn with_default_values(width: usize, height: usize) -> Self
     where
         T: Default,
+        T: Clone,
     {
         Self::new(width, height, T::default())
     }
@@ -76,9 +74,12 @@ where
         self.len() == 0
     }
 
-    pub fn get(&self, position: Position) -> Option<T> {
+    pub fn get(&self, position: Position) -> Option<T>
+    where
+        T: Clone,
+    {
         if self.in_bounds(position) {
-            Some(self.values[to_grid_index(position, self.size)])
+            Some(self.values[to_grid_index(position, self.size)].clone())
         } else {
             None
         }
@@ -94,6 +95,14 @@ where
         }
     }
 
+    pub fn get_ref(&self, position: Position) -> Option<&T> {
+        if self.in_bounds(position) {
+            Some(&self.values[to_grid_index(position, self.size)])
+        } else {
+            None
+        }
+    }
+
     pub fn get_mut(&mut self, position: Position) -> Option<&mut T> {
         if self.in_bounds(position) {
             Some(&mut self.values[to_grid_index(position, self.size)])
@@ -102,7 +111,10 @@ where
         }
     }
 
-    pub fn get_sub_grid(&self, offset: Position, size: RectSize) -> Option<Grid<T>> {
+    pub fn get_sub_grid(&self, offset: Position, size: RectSize) -> Option<Grid<T>>
+    where
+        T: Clone,
+    {
         let mut values = Vec::new();
         for pos in size.iter() {
             let grid_pos = offset + pos;
@@ -110,21 +122,38 @@ where
                 return None;
             }
 
-            values.push(self.values[to_grid_index(grid_pos, self.size)]);
+            values.push(self.values[to_grid_index(grid_pos, self.size)].clone());
         }
 
         Some(Grid::with_preset_values(size.width, size.height, values.into_boxed_slice()))
+    }
+
+    pub fn swap(&mut self, position1: Position, position2: Position) -> Result<(), ()>
+    where
+        T: Clone,
+    {
+        let val1 = self.get(position1).ok_or(())?.clone();
+        self.set(position1, self.get(position2).ok_or(())?)?;
+        self.set(position2, val1)
     }
 
     pub fn into_array(self) -> Box<[T]> {
         self.values
     }
 
-    pub fn iter_with_position(&self) -> GridIter<T> {
+    pub fn as_array(&self) -> &[T] {
+        &self.values
+    }
+
+    pub fn as_mut_array(&mut self) -> &mut [T] {
+        &mut self.values
+    }
+
+    pub fn iter_with_position(&'_ self) -> GridIter<'_, T> {
         GridIter::new(&self.values, self.size)
     }
 
-    pub fn iter_mut_with_position(&mut self) -> GridIterMut<T> {
+    pub fn iter_mut_with_position(&'_ mut self) -> GridIterMut<'_, T> {
         GridIterMut::new(&mut self.values, self.size)
     }
 
@@ -132,11 +161,11 @@ where
         GridIntoIter::new(self.values, self.size)
     }
 
-    pub fn iter(&self) -> Iter<T> {
+    pub fn iter(&'_ self) -> Iter<'_, T> {
         self.values.iter()
     }
 
-    pub fn iter_mut(&mut self) -> IterMut<T> {
+    pub fn iter_mut(&'_ mut self) -> IterMut<'_, T> {
         self.values.iter_mut()
     }
 
