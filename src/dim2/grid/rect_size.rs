@@ -21,7 +21,7 @@ impl RectSize {
         self.len() == 0
     }
 
-    pub fn iter(&self) -> SizeIter {
+    pub fn iter(&'_ self) -> SizeIter<'_> {
         SizeIter {
             size: self,
             next_coords: Position { x: 0, y: 0 },
