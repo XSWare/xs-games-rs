@@ -20,7 +20,7 @@ pub fn to_grid_index(position: Position, size: RectSize) -> usize {
 pub fn to_grid_position(index: usize, size: RectSize) -> Position {
     Position {
         x: (index % size.width) as i64,
-        y: (index / size.height) as i64,
+        y: (index / size.width) as i64,
     }
 }
 
@@ -210,5 +210,19 @@ where
 {
     fn index_mut(&mut self, index: Position) -> &mut Self::Output {
         &mut self.values[to_grid_index(index, self.size)]
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn iter_test() {
+        let vals = vec![0, 1];
+        let grid = super::Grid::with_preset_values(1, 2, vals.into_boxed_slice());
+
+        assert_eq!(grid.iter_with_position().count(), 2);
+        let mut iter = grid.iter_with_position();
+        assert_eq!(iter.next().unwrap().0, super::Position::new(0, 0));
+        assert_eq!(iter.next().unwrap().0, super::Position::new(0, 1));
     }
 }
