@@ -13,7 +13,7 @@ pub fn distance(a: Position, b: Position) -> f64 {
 
 impl Position {
     pub const ZERO: Position = Position { x: 0, y: 0 };
-    
+
     pub const fn new(x: i64, y: i64) -> Self {
         Position { x, y }
     }
@@ -37,6 +37,15 @@ impl From<(usize, usize)> for Position {
 //         (self.x as usize, self.y as usize)
 //     }
 // }
+
+impl From<(i32, i32)> for Position {
+    fn from(position: (i32, i32)) -> Self {
+        Position {
+            x: position.0 as i64,
+            y: position.1 as i64,
+        }
+    }
+}
 
 impl From<(i64, i64)> for Position {
     fn from(position: (i64, i64)) -> Self {

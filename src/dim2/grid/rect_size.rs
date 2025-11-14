@@ -29,6 +29,15 @@ impl RectSize {
     }
 }
 
+impl From<(usize, usize)> for RectSize {
+    fn from(value: (usize, usize)) -> Self {
+        Self {
+            width: value.0,
+            height: value.1,
+        }
+    }
+}
+
 #[derive(Clone, Copy)]
 pub struct SizeIter<'a> {
     size: &'a RectSize,
