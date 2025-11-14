@@ -23,6 +23,12 @@ impl Position {
     }
 }
 
+impl Default for Position {
+    fn default() -> Self {
+        Self::ZERO
+    }
+}
+
 impl From<(usize, usize)> for Position {
     fn from(position: (usize, usize)) -> Self {
         Position {
