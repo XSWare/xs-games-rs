@@ -41,9 +41,10 @@ impl<T> Grid<T> {
     pub fn with_default_values(width: usize, height: usize) -> Self
     where
         T: Default,
-        T: Clone,
     {
-        Self::new(width, height, T::default())
+        let mut values = Vec::new();
+        values.resize_with(height * width, T::default);
+        Self::with_preset_values(width, height, values.into_boxed_slice())
     }
 
     pub const fn with_preset_values(width: usize, height: usize, values: Box<[T]>) -> Self {
