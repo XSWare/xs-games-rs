@@ -22,15 +22,15 @@ pub use square_pattern::*;
 use super::{Grid, Position};
 
 pub trait PatternPositions {
-    fn get_pattern_positions(&self, center: Position) -> Box<[Position]>;
+    fn get_pattern_positions(&self, center: Position, fill_center: bool) -> Box<[Position]>;
 }
 
-pub fn get_grid_values_from_pattern<T>(grid: &Grid<T>, center: Position, pattern: &dyn PatternPositions) -> Box<[T]>
+pub fn get_grid_values_from_pattern<T>(grid: &Grid<T>, center: Position, fill_center: bool, pattern: &dyn PatternPositions) -> Box<[T]>
 where
     T: Copy,
 {
     pattern
-        .get_pattern_positions(center)
+        .get_pattern_positions(center, fill_center)
         .iter()
         .filter_map(|&pos| grid.get(pos))
         .collect::<Vec<_>>()

@@ -1,7 +1,7 @@
 use std::{cell::OnceCell, collections::BTreeMap, sync::Arc};
 
 use crate::{
-    dim2::grid::{patterns::GridPattern, to_grid_index, Grid, Position, RectSize},
+    dim2::grid::{patterns::GridPattern, Grid, Position},
     FactoryCache,
 };
 
@@ -23,8 +23,7 @@ pub fn new_rectangle_pattern(offset_left: usize, offset_up: usize, offset_right:
     let width = offset_left + 1 + offset_right;
     let height = offset_up + 1 + offset_down;
 
-    let mut mapping = vec![true; width * height];
-    mapping[to_grid_index(center, RectSize::new(width, height))] = false;
+    let mapping = vec![true; width * height];
     GridPattern {
         mapping: Grid::with_preset_values(width, height, mapping.into_boxed_slice()),
         center,

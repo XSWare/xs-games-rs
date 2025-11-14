@@ -30,7 +30,7 @@ pub fn get_shortest_path<T: Copy>(
 
 fn get_neighbors<T: Copy>(grid: &Grid<T>, node: Position, is_pathable_tile: &dyn Fn(T) -> bool) -> Vec<(Position, i64)> {
     adjacent_pattern()
-        .get_pattern_positions(node)
+        .get_pattern_positions(node, false)
         .iter()
         .filter_map(|&pos| {
             let entity = grid.get(pos)?;

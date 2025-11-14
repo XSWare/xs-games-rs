@@ -1,8 +1,8 @@
 use std::{cell::OnceCell, collections::BTreeMap, sync::Arc};
 
 use crate::{
-    factory_cache::FactoryCache,
     dim2::grid::{Grid, Position},
+    factory_cache::FactoryCache,
 };
 
 use super::grid_pattern::GridPattern;
@@ -21,7 +21,7 @@ pub fn new_cross_pattern(arm_length: usize) -> GridPattern {
     let grid_values: Vec<_> = (0..grid_size * grid_size).map(|_| false).collect();
     let mut mapping = Grid::with_preset_values(grid_size, grid_size, grid_values.into_boxed_slice());
     for (pos, matches) in mapping.iter_mut_with_position() {
-        if pos != center && pos.x == center.x || pos.y == center.y {
+        if pos.x == center.x || pos.y == center.y {
             *matches = true;
         }
     }
