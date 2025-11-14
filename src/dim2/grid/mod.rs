@@ -170,6 +170,14 @@ impl<T> Grid<T> {
         self.values.iter_mut()
     }
 
+    /// map all grid values to a new grid with the same size
+    pub fn map<B, F>(&self, f: F) -> Grid<B>
+    where
+        F: FnMut(&T) -> B,
+    {
+        Grid::with_preset_values(self.width(), self.height(), self.values.iter().map(f).collect())
+    }
+
     const fn in_bounds(&self, position: Position) -> bool {
         position.x >= 0 && position.y >= 0 && (position.x as usize) < self.size.width && (position.y as usize) < self.size.height
     }
