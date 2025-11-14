@@ -32,12 +32,6 @@ impl From<(usize, usize)> for Position {
     }
 }
 
-// impl Into<(usize, usize)> for Position {
-//     fn into(self) -> (usize, usize) {
-//         (self.x as usize, self.y as usize)
-//     }
-// }
-
 impl From<(i32, i32)> for Position {
     fn from(position: (i32, i32)) -> Self {
         Position {
